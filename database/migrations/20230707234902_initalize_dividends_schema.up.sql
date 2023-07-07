@@ -6,4 +6,4 @@ CREATE TABLE dividends (
 );
 
 CREATE INDEX ix_dividends_ticker ON dividends(ticker);
-CREATE INDEX ix_dividends_date ON dividends(date);
+CREATE INDEX ix_dividends_date ON dividends(received_on);

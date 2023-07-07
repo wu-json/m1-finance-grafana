@@ -16,10 +16,10 @@ tasks:
   # Postgres
   pg:migrate:
     cmds:
-      - migrate -source "$MIGRATIONS_PATH" -database "$POSTGRES_URL" up
+      - migrate -database "$POSTGRES_URL" -path "$MIGRATIONS_PATH" up
     env:
       MIGRATIONS_PATH: ./database/migrations
-      POSTGRES_URL: postgres://user:pass@localhost:5432/m1finance
+      POSTGRES_URL: postgres://user:pass@localhost:5432/m1finance?sslmode=disable
 
   pg:migration:generate:
     cmds:
