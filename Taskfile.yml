@@ -1,0 +1,12 @@
+version: '3'
+tasks:
+  docker:up:
+    cmds:
+      - docker compose up -d
+    env:
+      COMPOSE_PROJECT_NAME: m1-finance-grafana
+  docker:down:
+    cmds:
+      - docker compose down
+    env:
+      COMPOSE_PROJECT_NAME: m1-finance-grafana
