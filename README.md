@@ -9,4 +9,11 @@ This repository allows you to visualize M1 Finance Account data using Grafana.
 
 ## Running Locally
 
-First, spin up the Postgres database locally by running `task docker:up`.
+```bash
+# spin up postgres locally
+task docker:up
+
+# configure workspace
+go work init
+go work use ./apps/parse-csv
+```
