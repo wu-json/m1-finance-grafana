@@ -1,5 +1,6 @@
 version: '3'
 tasks:
+  # Docker Compose
   docker:up:
     cmds:
       - docker compose up -d
@@ -10,3 +11,5 @@ tasks:
       - docker compose down
     env:
       COMPOSE_PROJECT_NAME: m1-finance-grafana
+
+  # Parse CSV
