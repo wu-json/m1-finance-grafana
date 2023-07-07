@@ -4,7 +4,8 @@ This repository allows you to visualize M1 Finance Account data using Grafana.
 
 ## Requirements
 
-- [Task](https://taskfile.dev/usage/)
+- [Task](https://taskfile.dev/usage/) (`brew install go task`)
+- [golang-migrate CLI](https://github.com/golang-migrate/migrate) (`brew install golang-migrate`)
 - [Go v1.20.5](https://go.dev/doc/install)
 
 ## Running Locally
@@ -13,7 +14,5 @@ This repository allows you to visualize M1 Finance Account data using Grafana.
 # spin up postgres locally
 task docker:up
 
-# configure workspace
-go work init
-go work use ./apps/parse-csv
+# run migrations locally
 ```
