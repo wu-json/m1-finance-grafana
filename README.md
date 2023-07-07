@@ -1,2 +1,3 @@
 # m1-finance-grafana
-Visualize M1 Finance with Grafana.
+
+This repository allows you to visualize M1 Finance Account data using Grafana.
