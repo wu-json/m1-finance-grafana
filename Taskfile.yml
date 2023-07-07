@@ -12,4 +12,10 @@ tasks:
     env:
       COMPOSE_PROJECT_NAME: m1-finance-grafana
 
-  # Parse CSV
+  # Postgres
+  pg:migrate:
+    cmds:
+      - migrate -source $MIGRATIONS_PATH -database $POSTGRES_URL
+    env:
+      MIGRATIONS_PATH: ./database/migrations
+      POSTGRES_URL: postgres://user:pass@localhost:5432/m1finance
