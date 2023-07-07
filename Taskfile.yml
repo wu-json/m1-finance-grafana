@@ -6,6 +6,7 @@ tasks:
       - docker compose up -d
     env:
       COMPOSE_PROJECT_NAME: m1-finance-grafana
+
   docker:down:
     cmds:
       - docker compose down
@@ -15,7 +16,11 @@ tasks:
   # Postgres
   pg:migrate:
     cmds:
-      - migrate -source $MIGRATIONS_PATH -database $POSTGRES_URL
+      - migrate -source "$MIGRATIONS_PATH" -database "$POSTGRES_URL" up
     env:
       MIGRATIONS_PATH: ./database/migrations
       POSTGRES_URL: postgres://user:pass@localhost:5432/m1finance
+
+  pg:migration:generate:
+    cmds:
+      - migrate create -dir ./database/migrations -ext sql {{.MIGRATION_NAME}}
