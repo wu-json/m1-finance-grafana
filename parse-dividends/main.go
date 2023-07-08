@@ -81,6 +81,9 @@ func run(ctx context.Context, logger *zap.SugaredLogger) error {
 			defer wg.Done()
 			logger.Infof("reading file: %s\n", file)
 			err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
+			if err != nil {
+				logger.Warnf("error while reading file: %s\n", file, err)
+			}
 		}(file)
 	}
 
