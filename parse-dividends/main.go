@@ -57,9 +57,13 @@ func run() error {
 			fmt.Println(r)
 
 			receivedOn, _ := time.Parse("Jan 2, 2006", r[0])
-			activityType := r[1]
 			ticker := strings.Split(r[2], " ")[0]
 			dollarValue := r[3]
+
+			activityType := r[1]
+			if activityType == "Dividend - Deduction" {
+				activityType = "Deduction"
+			}
 
 			err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
 				Ticker:       ticker,
