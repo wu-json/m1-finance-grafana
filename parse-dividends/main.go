@@ -9,6 +9,8 @@ import (
 	"os"
 	"sync"
 
+	"go.uber.org/zap"
+
 	_ "github.com/lib/pq"
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/format"
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/sqlc"
@@ -55,9 +57,7 @@ func processFile(ctx context.Context, queries *sqlc.Queries, path string) error 
 	return nil
 }
 
-func run() error {
-	ctx := context.Background()
-
+func run(ctx context.Context, logger *zap.SugaredLogger) error {
 	// open pg connection
 	db, err := sql.Open("postgres", "user=user password=pass dbname=m1finance sslmode=disable")
 	if err != nil {
@@ -77,11 +77,11 @@ func run() error {
 
 	for _, file := range filenames {
 		wg.Add(1)
-		func() {
+		go func(file string) {
 			defer wg.Done()
-			fmt.Printf("Reading file: %s\n", file)
+			logger.Infof("reading file: %s\n", file)
 			err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
-		}()
+		}(file)
 	}
 
 	wg.Wait()
@@ -90,7 +90,15 @@ func run() error {
 }
 
 func main() {
-	if err := run(); err != nil {
+	ctx := context.Background()
+	zapLogger, err := zap.NewDevelopment()
+	if err != nil {
 		log.Fatal(err)
+	}
+
+	logger := zapLogger.Sugar()
+
+	if err := run(ctx, logger); err != nil {
+		logger.Error(err)
 	}
 }
