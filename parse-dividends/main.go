@@ -35,9 +35,45 @@ func getFileNames(dirPath string) ([]string, error) {
 	return data, nil
 }
 
-// func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
+// Contains checks if a string is present in a slice
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
 
-// }
+	return false
+}
+
+func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
+	if len(csvRecord) != 4 {
+		return sqlc.CreateDividendsParams{}, fmt.Errorf("invalid csv record format: does not have 4 columns")
+	}
+
+	receivedOn, _ := time.Parse("Jan 2, 2006", csvRecord[0])
+	ticker := strings.Split(csvRecord[2], " ")[0]
+	dollarValue := csvRecord[3]
+	activityType := csvRecord[1]
+
+	validActivityTypes := []string{"Dividend", "Dividend - Deduction"}
+	if !contains(validActivityTypes, activityType) {
+		return sqlc.CreateDividendsParams{}, fmt.Errorf("invalid activity type: %s", activityType)
+	}
+
+	if activityType == "Dividend" {
+		activityType = "Received"
+	} else {
+		activityType = "Deducted"
+	}
+
+	return sqlc.CreateDividendsParams{
+		Ticker:       ticker,
+		ActivityType: activityType,
+		DollarValue:  sql.NullString{String: dollarValue, Valid: true},
+		ReceivedOn:   receivedOn,
+	}, nil
+}
 
 func run() error {
 	ctx := context.Background()
