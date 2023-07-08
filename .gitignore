@@ -22,3 +22,6 @@ go.work
 
 # Docker temp files
 ./tmpdata
+
+# Dividend data
+dividend-data
