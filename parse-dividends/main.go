@@ -17,7 +17,7 @@ import (
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/utils"
 )
 
-func processFile(ctx context.Context, queries *sqlc.Queries, path string) error {
+func processFile(ctx context.Context, logger *zap.SugaredLogger, queries *sqlc.Queries, path string) error {
 	f, err := os.Open(path)
 	if err != nil {
 		return err
@@ -45,10 +45,12 @@ func processFile(ctx context.Context, queries *sqlc.Queries, path string) error 
 	for _, r := range records {
 		dividend, err := format.MapDividend(r)
 		if err != nil {
+			logger.Warnf("failed to map dividend: %v", r)
 			continue
 		}
 		err = queries.CreateDividends(ctx, dividend)
 		if err != nil {
+			logger.Warnf("failed save dividend in pg: %v", r)
 			continue
 		}
 
@@ -80,7 +82,7 @@ func run(ctx context.Context, logger *zap.SugaredLogger) error {
 		go func(file string) {
 			defer wg.Done()
 			logger.Infof("reading file: %s\n", file)
-			err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
+			err = processFile(ctx, logger, queries, fmt.Sprintf("../dividend-data/%s", file))
 			if err != nil {
 				logger.Warnf("error while reading file: %s\n", file, err)
 			}
