@@ -101,34 +101,20 @@ func run() error {
 		}
 
 		csvReader := csv.NewReader(f)
-		records, err := csvReader.ReadAll()
+		allRecords, err := csvReader.ReadAll()
 		if err != nil {
 			return err
 		}
 
-		for i, r := range records {
-			if i == 0 {
-				continue
+		// ignore first record since that is the csv header
+		records := allRecords[1:]
+
+		for _, r := range records {
+			dividend, err := mapDividend(r)
+			if err != nil {
+				return err
 			}
-			fmt.Println(r)
-
-			receivedOn, _ := time.Parse("Jan 2, 2006", r[0])
-			ticker := strings.Split(r[2], " ")[0]
-			dollarValue := r[3]
-
-			activityType := r[1]
-			if activityType == "Dividend - Deduction" {
-				activityType = "Deduction"
-			} else if activityType != "Dividend" {
-				return fmt.Errorf("invalid activity type: %s", activityType)
-			}
-
-			err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
-				Ticker:       ticker,
-				ActivityType: activityType,
-				DollarValue:  sql.NullString{String: dollarValue, Valid: true},
-				ReceivedOn:   receivedOn,
-			})
+			err = queries.CreateDividends(ctx, dividend)
 			if err != nil {
 				return err
 			}
