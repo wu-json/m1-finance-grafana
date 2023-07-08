@@ -24,3 +24,8 @@ tasks:
   pg:migration:generate:
     cmds:
       - migrate create -dir ./database/migrations -ext sql {{.MIGRATION_NAME}}
+
+  # Parse Dividends
+  parse:dividends:
+    cmds:
+      - cd parse-dividends && go run main.go
