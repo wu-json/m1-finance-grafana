@@ -19,13 +19,13 @@ import (
 func getFileNames(dirPath string) ([]string, error) {
 	dir, err := os.Open(dirPath)
 	if err != nil {
-		return make([]string, 0), err
+		return nil, err
 	}
 	defer dir.Close()
 
 	fis, err := dir.Readdir(-1)
 	if err != nil {
-		return make([]string, 0), err
+		return nil, err
 	}
 
 	data := make([]string, len(fis))
@@ -35,6 +35,10 @@ func getFileNames(dirPath string) ([]string, error) {
 
 	return data, nil
 }
+
+// func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
+
+// }
 
 func run() error {
 	ctx := context.Background()
