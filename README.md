@@ -10,9 +10,6 @@ I personally love M1 Finance for dividend investing, but my one gripe with the p
 
 This project is super simple. It involves a Go script that parses and formats your M1 Finance dividend data CSVs and stores them in a local Postgres database, which can then be used as a data-source for a local Grafana instance.
 
-> Please note that as a TypeScript one-trick, I'm still a Go novice. Do not
-> judge my code too hard I promise it will get better...
-
 ## Requirements
 
 - [Task v2.6.2](https://taskfile.dev/usage/) (`brew install go task`)
