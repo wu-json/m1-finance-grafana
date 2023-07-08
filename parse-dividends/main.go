@@ -75,6 +75,22 @@ func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
 	}, nil
 }
 
+func validateHeaders(csvHeaders []string) error {
+	if len(csvHeaders) != 4 {
+		return fmt.Errorf("invalid csv headers: has %d columns instead of 4", len(csvHeaders))
+	} else if csvHeaders[0] != "Date" {
+		return fmt.Errorf("invalid csv headers: header 0 is %s instead of \"Date\"", csvHeaders[0])
+	} else if csvHeaders[1] != "Activity" {
+		return fmt.Errorf("invalid csv headers: header 1 is %s instead of \"Activity\"", csvHeaders[1])
+	} else if csvHeaders[2] != "Summary" {
+		return fmt.Errorf("invalid csv headers: header 2 is %s instead of \"Summary\"", csvHeaders[2])
+	} else if csvHeaders[3] != "Value" {
+		return fmt.Errorf("invalid csv headers: header 3 is %s instead of \"Value\"", csvHeaders[3])
+	} else {
+		return nil
+	}
+}
+
 func run() error {
 	ctx := context.Background()
 
@@ -102,6 +118,15 @@ func run() error {
 
 		csvReader := csv.NewReader(f)
 		allRecords, err := csvReader.ReadAll()
+		if err != nil {
+			return err
+		}
+
+		// validate headers
+		if len(allRecords) < 1 {
+			return fmt.Errorf("no records found")
+		}
+		err = validateHeaders(allRecords[0])
 		if err != nil {
 			return err
 		}
