@@ -14,8 +14,7 @@ import (
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/sqlc"
 )
 
-// Returns slice of strings containing filenames within the
-// specified directory path.
+// Returns slice of strings containing filenames within the specified directory path.
 func getFileNames(dirPath string) ([]string, error) {
 	dir, err := os.Open(dirPath)
 	if err != nil {
