@@ -14,8 +14,10 @@ import (
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/sqlc"
 )
 
-func getDividendFileNames(path string) ([]string, error) {
-	dir, err := os.Open("../dividend-data")
+// Returns slice of strings containing filenames within the
+// specified directory path.
+func getFileNames(dirPath string) ([]string, error) {
+	dir, err := os.Open(dirPath)
 	if err != nil {
 		return make([]string, 0), err
 	}
@@ -47,7 +49,7 @@ func run() error {
 	queries := sqlc.New(db)
 
 	// get names of each file in dividend-data directory
-	filenames, err := getDividendFileNames("../dividend-data")
+	filenames, err := getFileNames("../dividend-data")
 	if err != nil {
 		return err
 	}
