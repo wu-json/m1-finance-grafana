@@ -43,11 +43,11 @@ func processFile(ctx context.Context, queries *sqlc.Queries, path string) error 
 	for _, r := range records {
 		dividend, err := format.MapDividend(r)
 		if err != nil {
-			return err
+			continue
 		}
 		err = queries.CreateDividends(ctx, dividend)
 		if err != nil {
-			return err
+			continue
 		}
 
 	}
