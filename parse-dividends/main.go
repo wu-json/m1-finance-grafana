@@ -91,6 +91,46 @@ func validateHeaders(csvHeaders []string) error {
 	}
 }
 
+func processFile(ctx context.Context, queries *sqlc.Queries, path string) error {
+	f, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	allRecords, err := csvReader.ReadAll()
+	if err != nil {
+		return err
+	}
+
+	// validate headers
+	if len(allRecords) < 1 {
+		return fmt.Errorf("no records found")
+	}
+	err = validateHeaders(allRecords[0])
+	if err != nil {
+		return err
+	}
+
+	// ignore first record since that is the csv header
+	records := allRecords[1:]
+
+	for _, r := range records {
+		dividend, err := mapDividend(r)
+		if err != nil {
+			return err
+		}
+		err = queries.CreateDividends(ctx, dividend)
+		if err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
 func run() error {
 	ctx := context.Background()
 
@@ -111,42 +151,10 @@ func run() error {
 
 	for _, file := range filenames {
 		fmt.Printf("Reading file: %s\n", file)
-		f, err := os.Open(fmt.Sprintf("../dividend-data/%s", file))
+		err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
 		if err != nil {
 			return err
 		}
-
-		csvReader := csv.NewReader(f)
-		allRecords, err := csvReader.ReadAll()
-		if err != nil {
-			return err
-		}
-
-		// validate headers
-		if len(allRecords) < 1 {
-			return fmt.Errorf("no records found")
-		}
-		err = validateHeaders(allRecords[0])
-		if err != nil {
-			return err
-		}
-
-		// ignore first record since that is the csv header
-		records := allRecords[1:]
-
-		for _, r := range records {
-			dividend, err := mapDividend(r)
-			if err != nil {
-				return err
-			}
-			err = queries.CreateDividends(ctx, dividend)
-			if err != nil {
-				return err
-			}
-
-		}
-
-		f.Close()
 	}
 
 	return nil
