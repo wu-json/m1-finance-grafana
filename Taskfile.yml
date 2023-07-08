@@ -26,6 +26,9 @@ tasks:
       - migrate create -dir ./database/migrations -ext sql {{.MIGRATION_NAME}}
 
   # Parse Dividends
-  parse:dividends:
+  parse-dividends:
     cmds:
       - cd parse-dividends && go run main.go
+  parse-dividends:sqlc:generate:
+    cmds:
+      - cd parse-dividends && sqlc generate
