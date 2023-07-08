@@ -1,6 +1,17 @@
 # m1-finance-grafana
 
-This repository allows you to visualize M1 Finance Account data using Grafana.
+Visualize your M1 Finance Account data using Grafana! Currently supported use-cases are:
+
+- Dividend visualization
+
+## Inspiration
+
+I personally love M1 Finance for dividend investing, but my one gripe with the platform is its lack of data visualizations for this use-case. Since they allow you to download your dividend data as a CSV, I thought it would be nice to be able to create my own charts and tables using something like Grafana, which resulted in this project.
+
+This project is super simple. It involves a Go script that parses and formats your M1 Finance dividend data CSVs and stores them in a local Postgres database, which can then be used as a data-source for a local Grafana instance.
+
+> Please note that as a TypeScript one-trick, I'm still a Go novice. Do not
+> judge my code too hard I promise it will get better...
 
 ## Requirements
 
