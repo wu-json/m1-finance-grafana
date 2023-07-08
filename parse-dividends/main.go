@@ -121,8 +121,6 @@ func run() error {
 
 		}
 
-		fmt.Print(records)
-
 		f.Close()
 	}
 
