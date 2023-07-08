@@ -22,6 +22,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 
 	queries := sqlc.New(db)
 
