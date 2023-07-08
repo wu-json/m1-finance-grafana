@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -49,18 +50,30 @@ func run() error {
 			return err
 		}
 
+		for i, r := range records {
+			if i == 0 {
+				continue
+			}
+			fmt.Println(r)
+
+			receivedOn, _ := time.Parse("Jan 2, 2006", r[0])
+			ticker := strings.Split(r[2], " ")[0]
+			dollarValue := r[3]
+
+			err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
+				Ticker:      ticker,
+				DollarValue: sql.NullString{String: dollarValue, Valid: true},
+				ReceivedOn:  receivedOn,
+			})
+			if err != nil {
+				return err
+			}
+
+		}
+
 		fmt.Print(records)
 
 		f.Close()
-	}
-
-	err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
-		Ticker:      "VOO",
-		DollarValue: sql.NullString{String: "100.00", Valid: true},
-		ReceivedOn:  time.Now(),
-	})
-	if err != nil {
-		return err
 	}
 
 	return nil
