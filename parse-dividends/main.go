@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -37,6 +38,20 @@ func run() error {
 
 	for _, fi := range fis {
 		fmt.Printf("Reading file: %s\n", fi.Name())
+		f, err := os.Open(fmt.Sprintf("../dividend-data/%s", fi.Name()))
+		if err != nil {
+			return err
+		}
+
+		csvReader := csv.NewReader(f)
+		records, err := csvReader.ReadAll()
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(records)
+
+		f.Close()
 	}
 
 	err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
