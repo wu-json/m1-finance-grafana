@@ -13,39 +13,8 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/sqlc"
+	"github.com/wu-json/m1-finance-grafana/parse-dividends/utils"
 )
-
-// Returns slice of strings containing filenames within the specified directory path.
-func getFileNames(dirPath string) ([]string, error) {
-	dir, err := os.Open(dirPath)
-	if err != nil {
-		return nil, err
-	}
-	defer dir.Close()
-
-	fis, err := dir.Readdir(-1)
-	if err != nil {
-		return nil, err
-	}
-
-	data := make([]string, len(fis))
-	for i, fi := range fis {
-		data[i] = fi.Name()
-	}
-
-	return data, nil
-}
-
-// Contains checks if a string is present in a slice
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-
-	return false
-}
 
 func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
 	if len(csvRecord) != 4 {
@@ -58,7 +27,7 @@ func mapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
 	activityType := csvRecord[1]
 
 	validActivityTypes := []string{"Dividend", "Dividend - Deduction"}
-	if !contains(validActivityTypes, activityType) {
+	if !utils.Contains(validActivityTypes, activityType) {
 		return sqlc.CreateDividendsParams{}, fmt.Errorf("invalid activity type: %s", activityType)
 	}
 
@@ -145,7 +114,7 @@ func run() error {
 	queries := sqlc.New(db)
 
 	// get names of each file in dividend-data directory
-	filenames, err := getFileNames("../dividend-data")
+	filenames, err := utils.GetFileNames("../dividend-data")
 	if err != nil {
 		return err
 	}
