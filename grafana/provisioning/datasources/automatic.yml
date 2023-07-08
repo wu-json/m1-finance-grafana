@@ -1,0 +1,18 @@
+datasources:
+# https://grafana.com/docs/grafana/latest/datasources/postgres/
+- name: Postgres
+  type: postgres
+  url: host.docker.internal:5432
+  user: user
+  database: m1finance
+  secureJsonData:
+   password: "pass"
+  jsonData:
+   sslmode: "disable"
+   maxOpenConns: 100 # Grafana v5.4+
+   maxIdleConns: 100 # Grafana v5.4+
+   maxIdleConnsAuto: true # Grafana v9.5.1+
+   connMaxLifetime: 14400 # Grafana v5.4+
+   timescaledb: false
+  version: 1
+  editable: true
