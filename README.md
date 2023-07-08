@@ -15,4 +15,14 @@ This repository allows you to visualize M1 Finance Account data using Grafana.
 task docker:up
 
 # run migrations locally
+task pg:migrate
+```
+
+## Generating Migrations
+
+If you need to make updates to the database schema, you can create a new migration by running the following.
+
+```bash
+# generate a migration in ./database/migrations directory
+task pg:migration:generate MIGRATION_NAME=my_migration
 ```
