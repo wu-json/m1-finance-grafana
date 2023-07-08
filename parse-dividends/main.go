@@ -36,7 +36,7 @@ func run() error {
 	dir.Close()
 
 	for _, fi := range fis {
-		fmt.Println(fi.Name())
+		fmt.Printf("Reading file: %s\n", fi.Name())
 	}
 
 	err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
