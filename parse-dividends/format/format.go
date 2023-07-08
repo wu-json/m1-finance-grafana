@@ -11,6 +11,7 @@ import (
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/utils"
 )
 
+// Transforms an M1 Finance CSV record into a format ready for Postgres insertion.
 func MapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
 	if len(csvRecord) != 4 {
 		return sqlc.CreateDividendsParams{}, fmt.Errorf("invalid csv record format: does not have 4 columns")
@@ -40,6 +41,7 @@ func MapDividend(csvRecord []string) (sqlc.CreateDividendsParams, error) {
 	}, nil
 }
 
+// Ensures that the headers of an M1 Finance CSV are what we think they should be.
 func ValidateHeaders(csvHeaders []string) error {
 	if len(csvHeaders) != 4 {
 		return fmt.Errorf("invalid csv headers: has %d columns instead of 4", len(csvHeaders))
