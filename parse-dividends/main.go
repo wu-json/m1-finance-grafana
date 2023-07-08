@@ -63,6 +63,8 @@ func run() error {
 			activityType := r[1]
 			if activityType == "Dividend - Deduction" {
 				activityType = "Deduction"
+			} else if activityType != "Dividend" {
+				return fmt.Errorf("invalid activity type: %s", activityType)
 			}
 
 			err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
