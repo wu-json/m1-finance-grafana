@@ -13,7 +13,7 @@ import (
 func run() error {
 	ctx := context.Background()
 
-	db, err := sql.Open("postgres", "user=user pass=pass dbname=m1finance sslmode=disable")
+	db, err := sql.Open("postgres", "user=user password=pass dbname=m1finance sslmode=disable")
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func run() error {
 
 	err = queries.CreateDividends(ctx, sqlc.CreateDividendsParams{
 		Ticker:      "VOO",
-		DollarValue: sql.NullString{String: "100.00"},
+		DollarValue: sql.NullString{String: "100.00", Valid: true},
 		ReceivedOn:  time.Now(),
 	})
 	if err != nil {
