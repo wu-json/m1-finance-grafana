@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -149,13 +150,18 @@ func run() error {
 		return err
 	}
 
+	wg := sync.WaitGroup{}
+
 	for _, file := range filenames {
-		fmt.Printf("Reading file: %s\n", file)
-		err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
-		if err != nil {
-			return err
-		}
+		wg.Add(1)
+		func() {
+			defer wg.Done()
+			fmt.Printf("Reading file: %s\n", file)
+			err = processFile(ctx, queries, fmt.Sprintf("../dividend-data/%s", file))
+		}()
 	}
+
+	wg.Wait()
 
 	return nil
 }
