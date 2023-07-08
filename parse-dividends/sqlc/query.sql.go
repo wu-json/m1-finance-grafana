@@ -12,16 +12,22 @@ import (
 )
 
 const createDividends = `-- name: CreateDividends :exec
-INSERT INTO dividends (ticker, dollar_value, received_on) VALUES ($1, $2, $3) ON CONFLICT (received_on) DO NOTHING
+INSERT INTO dividends (ticker, dollar_value, activity_type, received_on) VALUES ($1, $2, $3, $4) ON CONFLICT (received_on) DO NOTHING
 `
 
 type CreateDividendsParams struct {
-	Ticker      string
-	DollarValue sql.NullString
-	ReceivedOn  time.Time
+	Ticker       string
+	DollarValue  sql.NullString
+	ActivityType string
+	ReceivedOn   time.Time
 }
 
 func (q *Queries) CreateDividends(ctx context.Context, arg CreateDividendsParams) error {
-	_, err := q.db.ExecContext(ctx, createDividends, arg.Ticker, arg.DollarValue, arg.ReceivedOn)
+	_, err := q.db.ExecContext(ctx, createDividends,
+		arg.Ticker,
+		arg.DollarValue,
+		arg.ActivityType,
+		arg.ReceivedOn,
+	)
 	return err
 }

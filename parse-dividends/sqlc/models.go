@@ -10,8 +10,9 @@ import (
 )
 
 type Dividend struct {
-	ID          int32
-	Ticker      string
-	DollarValue sql.NullString
-	ReceivedOn  time.Time
+	ID           int32
+	Ticker       string
+	ActivityType string
+	DollarValue  sql.NullString
+	ReceivedOn   time.Time
 }
