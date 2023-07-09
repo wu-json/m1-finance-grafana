@@ -2,7 +2,7 @@
 
 Visualize your M1 Finance Account data using Grafana! Currently supported use-cases are:
 
-- Dividend visualization
+- dividend visualization
 
 ## Inspiration
 
