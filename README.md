@@ -18,7 +18,7 @@ This project is super simple. It uses a Go script that parses and formats your M
 - [Go v1.20.5](https://go.dev/doc/install)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-## Running Locally
+## Running The Project
 
 First, you will want to prepare the database for ingesting your data. We will use Docker to spin up a Postgres instance and then apply the migrations using `golang-migrate`.
 
@@ -42,6 +42,8 @@ task parse-dividends
 ```
 
 From there, you should see that the Postgres database contains your dividend data. You should now be able to visualize the data at the Grafana server hosted on `http://localhost:3000` (username is `user` and password is `pass` as configured in the `docker-compose.yaml`). The Postgres data-source and dividend dashboard should already be available as soon as you log in, as both of them are pre-provisioned.
+
+## Data Viz
 
 ## Generating Migrations
 
