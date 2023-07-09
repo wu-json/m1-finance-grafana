@@ -6,9 +6,9 @@ Visualize your M1 Finance Account data using Grafana! Currently supported use-ca
 
 ## Inspiration
 
-I personally love M1 Finance for dividend investing, but my one gripe with the platform is its lack of data visualizations for this use-case. Since they allow you to download your dividend data as a CSV, I thought it would be nice to be able to create my own charts and tables using something like Grafana, which resulted in this project.
+I personally love M1 Finance for dividend investing, but my one gripe with the platform is its lack of data visualizations for this use-case. However, since they allow you to download your dividend data as a CSV, I figured it wouldn't be difficult to build the visualizations I wanted myself using Grafana, which resulted in this project.
 
-This project is super simple. It involves a Go script that parses and formats your M1 Finance dividend data CSVs and stores them in a local Postgres database, which can then be used as a data-source for a local Grafana instance.
+This project is super simple. It uses a Go script that parses and formats your M1 Finance dividend data CSVs and stores them in a local Postgres database (with TimescaleDB plugin), which can then be used as a data-source for a local Grafana instance.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ This project is super simple. It involves a Go script that parses and formats yo
 First, you will want to prepare the database for ingesting your data. We will use Docker to spin up a Postgres instance and then apply the migrations using `golang-migrate`.
 
 ```bash
-# spin up postgres locally
+# spin up postgres & grafana locally
 task docker:up
 
 # run migrations locally
@@ -41,7 +41,7 @@ Now that we have the raw CSVs ready, we can ingest the data into Postgres by run
 task parse-dividends
 ```
 
-From there, you should see that the Postgres database contains your dividend data.
+From there, you should see that the Postgres database contains your dividend data. You should now be able to visualize the data at the Grafana server hosted on `http://localhost:3000` (username is `user` and password is `pass` as configured in the `docker-compose.yaml`). The Postgres data-source and dividend dashboard should already be available as soon as you log in, as both of them are pre-provisioned.
 
 ## Generating Migrations
 
