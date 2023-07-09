@@ -45,6 +45,8 @@ From there, you should see that the Postgres database contains your dividend dat
 
 ## Data Viz
 
+![Screenshot 2023-07-08 at 9 07 17 PM](https://github.com/wu-json/m1-finance-grafana/assets/45532884/5a9ded82-025e-4594-888d-6df785d3a4a2)
+
 ## Generating Migrations
 
 If you need to make updates to the database schema, you can create a new migration by running the following.
