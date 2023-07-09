@@ -83,8 +83,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 9,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -110,7 +110,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  received_on\nORDER BY\n  received_on",
+          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
           "refId": "A",
           "sql": {
             "columns": [
@@ -156,6 +156,111 @@
         "type": "postgres",
         "uid": "P44368ADAD746BC27"
       },
+      "description": "Displays total dividends earned during period.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-green",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 50
+              },
+              {
+                "color": "dark-green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "SUM",
+                "parameters": [
+                  {
+                    "name": "dollar_value",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "received_on",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "received_on",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "dividends"
+        }
+      ],
+      "title": "Total Dividends Earned",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "P44368ADAD746BC27"
+      },
       "description": "Displays breakdown of dividends earned by each ticker during the period sorted by dollar value.",
       "fieldConfig": {
         "defaults": {
@@ -184,7 +289,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 9
       },
       "id": 2,
       "options": {
@@ -193,7 +298,9 @@
         "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^value$/",
           "values": true
         },
@@ -251,14 +358,160 @@
       "title": "Top Earners",
       "transformations": [],
       "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "P44368ADAD746BC27"
+      },
+      "description": "Dividends earned recently.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  ticker as \"Ticker\",\n  dollar_value as \"Amount\",\n  received_on as \"Received On\"\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nORDER BY\n  received_on DESC\nLIMIT\n  100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "SUM",
+                "parameters": [
+                  {
+                    "name": "dollar_value",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "received_on",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "received_on",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "dividends"
+        }
+      ],
+      "title": "Recent Dividends",
+      "type": "table"
     }
   ],
-  "refresh": "",
+  "refresh": "1d",
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "1d",
+          "value": "1d"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Bucket Interval",
+        "multi": false,
+        "name": "bucket_interval",
+        "options": [
+          {
+            "selected": true,
+            "text": "1d",
+            "value": "1d"
+          },
+          {
+            "selected": false,
+            "text": "7d",
+            "value": "7d"
+          },
+          {
+            "selected": false,
+            "text": "14d",
+            "value": "14d"
+          },
+          {
+            "selected": false,
+            "text": "30d",
+            "value": "30d"
+          }
+        ],
+        "query": "1d,7d,14d,30d",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "2023-06-01T00:00:00.000Z",
@@ -268,6 +521,6 @@
   "timezone": "",
   "title": "Dividends",
   "uid": "c8d7c9b8-1278-4b3b-9af9-428617d0bbc8",
-  "version": 13,
+  "version": 8,
   "weekStart": ""
 }
