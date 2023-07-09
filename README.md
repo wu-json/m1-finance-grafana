@@ -45,7 +45,9 @@ From there, you should see that the Postgres database contains your dividend dat
 
 ## Data Viz
 
-![Screenshot 2023-07-08 at 9 07 17 PM](https://github.com/wu-json/m1-finance-grafana/assets/45532884/5a9ded82-025e-4594-888d-6df785d3a4a2)
+Here is what the Dividends Dashboard looks like inside Grafana with some mock data. There are a couple of panels that display a time series of dividends earned, high earners, as well as a snapshot of the total dollar value of dividends earned during the period. This makes it much easier to predict dividend income over time, and can also help you figure out which dividend stocks to invest in to fill in any "dry" months in your dividend time series.
+
+![Grafana Screenshot](https://github.com/wu-json/m1-finance-grafana/assets/45532884/5a9ded82-025e-4594-888d-6df785d3a4a2)
 
 ## Generating Migrations
 
