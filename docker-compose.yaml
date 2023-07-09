@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  postgres:
-    image: postgres:15.3
+  timescale:
+    image: timescale/timescaledb-ha:pg15-latest
     ports:
       - 5432:5432
     environment:
