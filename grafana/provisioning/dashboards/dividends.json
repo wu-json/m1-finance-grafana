@@ -110,7 +110,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
+          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\n  AND ticker IN ($symbols)\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
           "refId": "A",
           "sql": {
             "columns": [
@@ -215,7 +215,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
+          "rawSql": "SELECT\n  CAST(SUM(dollar_value) AS NUMERIC) as \"Earned Dividends\",\n  time_bucket('$bucket_interval', received_on) as received_on\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\n  AND ticker IN ($symbols)\nGROUP BY\n  time_bucket('$bucket_interval', received_on)\nORDER BY\n  received_on",
           "refId": "A",
           "sql": {
             "columns": [
@@ -317,7 +317,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  ticker as metric,\n  CAST(SUM(dollar_value) AS NUMERIC) as value\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nGROUP BY\n  ticker\nORDER BY\n  value DESC\nLIMIT\n  20;",
+          "rawSql": "SELECT\n  ticker as metric,\n  CAST(SUM(dollar_value) AS NUMERIC) as value\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\n  AND ticker IN ($symbols)\nGROUP BY\n  ticker\nORDER BY\n  value DESC\nLIMIT\n  20;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -425,7 +425,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  ticker as \"Ticker\",\n  dollar_value as \"Amount\",\n  received_on as \"Received On\"\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\nORDER BY\n  received_on DESC\nLIMIT\n  100;",
+          "rawSql": "SELECT\n  ticker as \"Ticker\",\n  dollar_value as \"Amount\",\n  received_on as \"Received On\"\nFROM\n  dividends\nWHERE\n  received_on >= $__timeFrom() :: timestamptz\n  AND received_on < $__timeTo() :: timestamptz\n  AND ticker IN ($symbols)\nORDER BY\n  received_on DESC\nLIMIT\n  100;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -510,17 +510,45 @@
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "P44368ADAD746BC27"
+        },
+        "definition": "SELECT DISTINCT ticker FROM dividends;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Symbols",
+        "multi": true,
+        "name": "symbols",
+        "options": [],
+        "query": "SELECT DISTINCT ticker FROM dividends;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "2023-06-01T00:00:00.000Z",
-    "to": "2023-06-30T00:00:00.000Z"
+    "from": "now-6M",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Dividends",
   "uid": "c8d7c9b8-1278-4b3b-9af9-428617d0bbc8",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
