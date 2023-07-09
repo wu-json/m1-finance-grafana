@@ -32,7 +32,18 @@ task pg:migrate
 
 From there, you will want to download `Dividend Activity` data from M1 Finance. You can do this by navigating to the account of interest on the website and then going to the `Activity Tab -> Filter Dividend Events -> Download CSV`. Make sure before you download, that you ensure the activity filter is set to filter for dividend events only.
 
-Once you download all your CSVs, you will want to put them inside a directory inside the root project called `dividend-data`. I personally recommend you make each CSV contain 1 month of dividend data and then name the files something like `/m1-finance-grafana/dividend-data/2023-06-01-2023-07-01-dividends.csv` and back them up to cloud somewhere for easy access.
+Once you download all your CSVs, you will want to put them inside a directory inside the root project called `dividend-data`. I personally recommend you make each CSV contain 1 month of dividend data and then name the files something like `start-date-end-date-page.csv` (e.g. `2023-06-01-2023-07-01-1.csv`) and back them up to cloud somewhere for easy access.
+
+```bash
+# directory structure
+/m1-finance-grafana
+    /dividend-data
+        2023-05-01-2023-06-01-1.csv
+        2023-05-01-2023-06-01-2.csv
+        2023-06-01-2023-07-01-1.csv
+    /parse-dividends
+    ...
+```
 
 Now that we have the raw CSVs ready, we can ingest the data into Postgres by running the following.
 
