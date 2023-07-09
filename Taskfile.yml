@@ -13,15 +13,15 @@ tasks:
     env:
       COMPOSE_PROJECT_NAME: m1-finance-grafana
 
-  # Timescale
-  ts:migrate:
+  # Postgres
+  pg:migrate:
     cmds:
       - migrate -database "$POSTGRES_URL" -path "$MIGRATIONS_PATH" up
     env:
       MIGRATIONS_PATH: ./database/migrations
       POSTGRES_URL: postgres://user:pass@localhost:5432/m1finance?sslmode=disable
 
-  ts:migration:generate:
+  pg:migration:generate:
     cmds:
       - migrate create -dir ./database/migrations -ext sql {{.MIGRATION_NAME}}
 
