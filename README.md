@@ -12,9 +12,9 @@ This project is super simple. It uses a Go script that parses and formats your M
 
 ## Requirements
 
-- [Task v2.6.2](https://taskfile.dev/usage/) (`brew install go task`)
-- [golang-migrate CLI v4.16.2](https://github.com/golang-migrate/migrate) (`brew install golang-migrate`)
-- [sqlc v1.19.0](https://docs.sqlc.dev/en/stable/overview/install.html) (`brew install sqlc`)
+- [Task v2.6.2](https://taskfile.dev/usage/): `brew install go task`
+- [golang-migrate CLI v4.16.2](https://github.com/golang-migrate/migrate): `brew install golang-migrate`
+- [sqlc v1.19.0](https://docs.sqlc.dev/en/stable/overview/install.html): `brew install sqlc`
 - [Go v1.20.5](https://go.dev/doc/install)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
