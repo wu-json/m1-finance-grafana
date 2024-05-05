@@ -5,11 +5,11 @@ import (
 	"database/sql"
 	"encoding/csv"
 	"fmt"
+	"go.uber.org/zap"
 	"log"
 	"os"
+	"strings"
 	"sync"
-
-	"go.uber.org/zap"
 
 	_ "github.com/lib/pq"
 	"github.com/wu-json/m1-finance-grafana/parse-dividends/format"
@@ -81,6 +81,10 @@ func run(ctx context.Context, logger *zap.SugaredLogger) error {
 		wg.Add(1)
 		go func(file string) {
 			defer wg.Done()
+			if !strings.HasSuffix(file, ".csv") {
+				logger.Warnf("not reading non-csv file :%s\n", file)
+				return
+			}
 			logger.Infof("reading file: %s\n", file)
 			err = processFile(ctx, logger, queries, fmt.Sprintf("../dividend-data/%s", file))
 			if err != nil {
